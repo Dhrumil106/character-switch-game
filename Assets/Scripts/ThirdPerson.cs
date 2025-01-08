@@ -16,7 +16,7 @@ public class ThirdPerson : MonoBehaviour
     [SerializeField] private float sprintTransitSpeed=2.5f;
     [SerializeField] private float gravity = 9.81f;
     [SerializeField] private float jumpHeight = 2f;
-    [SerializeField] private float pushForce = 1;
+   
 
     private float verticalVelocity;
     private float speed;
