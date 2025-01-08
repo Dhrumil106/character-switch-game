@@ -42,6 +42,13 @@ public class CharacterSwap : MonoBehaviour
         character = possibleCharacters[whichCharacter];
         character.GetComponent<ThirdPerson>().enabled = true;
         character.GetComponent<passiveGravity>().enabled = false;
+
+        PullingObjects newPuller = character.GetComponent<PullingObjects>();
+        if (newPuller != null)
+        {
+            newPuller.enabled = true; // Enable the pulling functionality
+        }
+
         for (int i = 0; i < possibleCharacters.Count; i++)
         {
             if (possibleCharacters[i] != character)
@@ -61,6 +68,12 @@ public class CharacterSwap : MonoBehaviour
                     possibleCharacters[i].GetComponent<ThirdPerson>().enabled = false;
                     possibleCharacters[i].GetComponent<passiveGravity>().enabled = true;
 
+                    PullingObjects swappedOutPuller = possibleCharacters[i].GetComponent<PullingObjects>();
+                    if (swappedOutPuller != null)
+                    {
+                        swappedOutPuller.StopPulling(); // Stop pulling immediately
+                        swappedOutPuller.enabled = false; // Disable pulling
+                    }
                 }
                 
             }
