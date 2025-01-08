@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ThirdPersonCOntroler : MonoBehaviour
 {
-    private Animator anim;
+    public Animator anim;
     private CharacterController controller;
 
     public float speed = 600.0f;

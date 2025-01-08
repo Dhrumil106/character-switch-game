@@ -9,17 +9,7 @@ public class CharacterSwap : MonoBehaviour
     public Transform character;
     public List<Transform> possibleCharacters;
     public int whichCharacter;
-    public CinemachineVirtualCamera cam;
-
-
-
-
-
-
-
-
-
-
+    public CinemachineFreeLook cam;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,17 +40,33 @@ public class CharacterSwap : MonoBehaviour
     public void Swap()
     {
         character = possibleCharacters[whichCharacter];
-        character.GetComponent<ThirdPersonCOntroler>().enabled = true;
+        character.GetComponent<ThirdPerson>().enabled = true;
+        character.GetComponent<passiveGravity>().enabled = false;
         for (int i = 0; i < possibleCharacters.Count; i++)
         {
             if (possibleCharacters[i] != character)
             {
+                var charController = possibleCharacters[i].GetComponent<ThirdPerson>();
+                var charAnimator = possibleCharacters[i].GetComponentInChildren<Animator>();
                 
-                possibleCharacters[i].GetComponent<ThirdPersonCOntroler>().enabled = false;
+
+                if (possibleCharacters[i] != character)
+                {
+                    
+                    if (charAnimator != null)
+                    {
+                        charAnimator.SetFloat("MoveSpeed", 0); // Set animation to idle
+                    }
+
+                    possibleCharacters[i].GetComponent<ThirdPerson>().enabled = false;
+                    possibleCharacters[i].GetComponent<passiveGravity>().enabled = true;
+
+                }
                 
             }
+            cam.LookAt = character;
+            cam.Follow = character;
         }
-        cam.LookAt = character;
-        cam.Follow = character;
     }
 }
+
