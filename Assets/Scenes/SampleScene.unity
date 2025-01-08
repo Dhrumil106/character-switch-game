@@ -1184,6 +1184,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 462d4760deb745148b23abdc7d5ffd3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1281298443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281298432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160a799986ddc404691e6ff29b36d9ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pushForce: 5
 --- !u!1 &1371584382
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,7 +1212,7 @@ GameObject:
   - component: {fileID: 1371584383}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Pullable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1311,7 +1324,7 @@ Transform:
   m_GameObject: {fileID: 1371584382}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 0.77, z: -0.15}
+  m_LocalPosition: {x: 7.67, y: 0.77, z: -0.15}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -2258,6 +2271,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5593195909017292627, guid: 4be7a99d429a19840a38df28f88a8680, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1281298440}
+    - targetCorrespondingSourceObject: {fileID: 5593195909017292627, guid: 4be7a99d429a19840a38df28f88a8680, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1281298443}
   m_SourcePrefab: {fileID: 100100000, guid: 4be7a99d429a19840a38df28f88a8680, type: 3}
 --- !u!1001 &1633526574
 PrefabInstance:
@@ -2550,6 +2566,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5593195909017292627, guid: 4be7a99d429a19840a38df28f88a8680, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1722528836}
+    - targetCorrespondingSourceObject: {fileID: 5593195909017292627, guid: 4be7a99d429a19840a38df28f88a8680, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1722528828}
     - targetCorrespondingSourceObject: {fileID: 5593195909017292627, guid: 4be7a99d429a19840a38df28f88a8680, type: 3}
       insertIndex: -1
@@ -2638,7 +2657,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160a799986ddc404691e6ff29b36d9ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushForce: 1
+  pushForce: 5
+--- !u!114 &1722528836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722528825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37ac589a916a394dacd6d7150d280b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pullSpeed: 5
+  pullRange: 3
+  minDistance: 2.07
+  pullableTag: Pullable
+  playerPullPosition: {fileID: 1722528826}
 --- !u!1 &1950507469
 GameObject:
   m_ObjectHideFlags: 0
