@@ -32,10 +32,8 @@ public class PullingObjects : MonoBehaviour
         // Make sure the LineRenderer is disabled at the start
         lineRenderer.enabled = false;
     }
-
-    void Update()
+    private void Update()
     {
-        // Check for input to start pulling.
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (!isPulling)
@@ -47,6 +45,11 @@ public class PullingObjects : MonoBehaviour
                 StopPulling();
             }
         }
+    }
+    void FixedUpdate()
+    {
+        // Check for input to start pulling.
+        
 
         // Handle pulling if active.
         if (isPulling && objectToPull != null)

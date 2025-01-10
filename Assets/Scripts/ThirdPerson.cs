@@ -52,7 +52,7 @@ public class ThirdPerson : MonoBehaviour
     private void GroundMovement()
     {
         Vector3 move = new Vector3(turnInput, 0, moveInput);
-        move = camera.transform.TransformDirection(move);
+        move = camera.transform.TransformDirection(move).normalized;
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
