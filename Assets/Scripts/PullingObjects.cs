@@ -45,6 +45,14 @@ public class PullingObjects : MonoBehaviour
                 StopPulling();
             }
         }
+
+        if (isPulling && objectToPull != null)
+        {
+            PullObject();
+            UpdateLineRenderer();  // Update the line renderer while pulling
+            ChangeObjectColor(Color.green);  // Change to green while pulling
+            CheckMaxDistance();
+        }
     }
     void FixedUpdate()
     {

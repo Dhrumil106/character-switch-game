@@ -54,14 +54,14 @@ public class Lever : MonoBehaviour
         Invoke(nameof(ResetInteractable), 0.5f); // Re-enable interaction after a short delay
     }
 
-    void OpenDoors()
+    public void OpenDoors()
     {
         StopAllCoroutines(); // Stop any ongoing movement
         StartCoroutine(MoveDoor(door1, door1ClosedLocalPosition, door1OpenLocalPosition));
         StartCoroutine(MoveDoor(door2, door2ClosedLocalPosition, door2OpenLocalPosition));
     }
 
-    void CloseDoors()
+    public void CloseDoors()
     {
         StopAllCoroutines(); // Stop any ongoing movement
         StartCoroutine(MoveDoor(door1, door1OpenLocalPosition, door1ClosedLocalPosition));
