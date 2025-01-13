@@ -15,6 +15,8 @@ public class Lever : MonoBehaviour
 
     private Vector3 door1ClosedLocalPosition; // Initial closed position of the first door
     private Vector3 door2ClosedLocalPosition; // Initial closed position of the second door
+    private Rigidbody door1Rigidbody; // Rigidbody for door1
+    private Rigidbody door2Rigidbody; // Rigidbody for door2
     private Animator leverAnimator; // Reference to the lever's Animator
 
     public float doorDelay = 1.0f; // Delay before doors start opening/closing
@@ -24,6 +26,10 @@ public class Lever : MonoBehaviour
         // Store the initial local positions of both doors
         door1ClosedLocalPosition = door1.transform.localPosition;
         door2ClosedLocalPosition = door2.transform.localPosition;
+
+        // Get Rigidbody components
+        door1Rigidbody = door1.GetComponent<Rigidbody>();
+        door2Rigidbody = door2.GetComponent<Rigidbody>();
 
         // Get the Animator component on the lever
         leverAnimator = GetComponent<Animator>();
@@ -64,30 +70,34 @@ public class Lever : MonoBehaviour
     public void OpenDoors()
     {
         StopAllCoroutines(); // Stop any ongoing movement
-        StartCoroutine(MoveDoor(door1, door1ClosedLocalPosition, door1OpenLocalPosition));
-        StartCoroutine(MoveDoor(door2, door2ClosedLocalPosition, door2OpenLocalPosition));
+        StartCoroutine(MoveDoor(door1Rigidbody, door1ClosedLocalPosition, door1OpenLocalPosition));
+        StartCoroutine(MoveDoor(door2Rigidbody, door2ClosedLocalPosition, door2OpenLocalPosition));
     }
 
     public void CloseDoors()
     {
         StopAllCoroutines(); // Stop any ongoing movement
-        StartCoroutine(MoveDoor(door1, door1OpenLocalPosition, door1ClosedLocalPosition));
-        StartCoroutine(MoveDoor(door2, door2OpenLocalPosition, door2ClosedLocalPosition));
+        StartCoroutine(MoveDoor(door1Rigidbody, door1OpenLocalPosition, door1ClosedLocalPosition));
+        StartCoroutine(MoveDoor(door2Rigidbody, door2OpenLocalPosition, door2ClosedLocalPosition));
     }
 
-    System.Collections.IEnumerator MoveDoor(GameObject door, Vector3 startPosition, Vector3 endPosition)
+    System.Collections.IEnumerator MoveDoor(Rigidbody doorRigidbody, Vector3 startPosition, Vector3 endPosition)
     {
         float elapsedTime = 0;
+        float duration = 1f / doorMoveSpeed;
 
-        while (elapsedTime < 1)
+        while (elapsedTime < duration)
         {
-            // Smoothly move the door between start and end local positions
-            door.transform.localPosition = Vector3.Lerp(startPosition, endPosition, elapsedTime);
-            elapsedTime += Time.deltaTime * doorMoveSpeed;
+            elapsedTime += Time.deltaTime;
+            Vector3 newPosition = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+
+            // Move the Rigidbody to the new position
+            doorRigidbody.MovePosition(doorRigidbody.transform.parent.TransformPoint(newPosition));
             yield return null;
         }
 
-        door.transform.localPosition = endPosition; // Ensure exact local position
+        // Ensure the final position is exact
+        doorRigidbody.MovePosition(doorRigidbody.transform.parent.TransformPoint(endPosition));
     }
 
     void ResetInteractable()
