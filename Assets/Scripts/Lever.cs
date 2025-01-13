@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class Lever : MonoBehaviour
 {
+
     public GameObject door1; // First sliding door
     public GameObject door2; // Second sliding door
     public Vector3 door1OpenLocalPosition; // Open position for the first door
     public Vector3 door2OpenLocalPosition; // Open position for the second door
     public float doorMoveSpeed = 2.0f; // Speed at which the doors move
-    public float leverRotationAngle = 45f; // How far the lever rotates
     private bool isDoorOpen = false; // To track the door state
     private bool isInteractable = true; // Prevent multiple interactions at once
 
     private Vector3 door1ClosedLocalPosition; // Initial closed position of the first door
     private Vector3 door2ClosedLocalPosition; // Initial closed position of the second door
-    private Quaternion initialLeverRotation;
+    private Animator leverAnimator; // Reference to the lever's Animator
+
+    public float doorDelay = 1.0f; // Delay before doors start opening/closing
 
     private void Start()
     {
@@ -23,8 +25,8 @@ public class Lever : MonoBehaviour
         door1ClosedLocalPosition = door1.transform.localPosition;
         door2ClosedLocalPosition = door2.transform.localPosition;
 
-        // Store the lever's initial rotation
-        initialLeverRotation = transform.rotation;
+        // Get the Animator component on the lever
+        leverAnimator = GetComponent<Animator>();
     }
 
     private void OnTriggerStay(Collider other)
@@ -37,21 +39,26 @@ public class Lever : MonoBehaviour
 
     void ToggleLever()
     {
-        isInteractable = false; // Prevent additional interactions until the toggle completes
+        if (!isInteractable) return; // Prevent multiple interactions at the same time
+
+        isInteractable = false; // Disable interactions during the toggle process
+
+        // Log current state for debugging
+        Debug.Log($"Toggle Lever: isDoorOpen = {isDoorOpen}");
 
         if (isDoorOpen)
         {
-            CloseDoors();
-            RotateLeverBack();
+            leverAnimator.SetTrigger("RotateBack"); // Trigger animation to rotate the lever back
+            Invoke(nameof(CloseDoors), doorDelay); // Wait before closing doors
         }
         else
         {
-            OpenDoors();
-            RotateLeverForward();
+            leverAnimator.SetTrigger("RotateForward"); // Trigger animation to rotate the lever forward
+            Invoke(nameof(OpenDoors), doorDelay); // Wait before opening doors
         }
 
-        isDoorOpen = !isDoorOpen; // Toggle the door state
-        Invoke(nameof(ResetInteractable), 0.5f); // Re-enable interaction after a short delay
+        isDoorOpen = !isDoorOpen; // Toggle the state
+        Invoke(nameof(ResetInteractable), 0.5f); // Allow interaction again after a short delay
     }
 
     public void OpenDoors()
@@ -81,16 +88,6 @@ public class Lever : MonoBehaviour
         }
 
         door.transform.localPosition = endPosition; // Ensure exact local position
-    }
-
-    void RotateLeverForward()
-    {
-        transform.rotation = Quaternion.Euler(transform.eulerAngles.x - leverRotationAngle, transform.eulerAngles.y, transform.eulerAngles.z);
-    }
-
-    void RotateLeverBack()
-    {
-        transform.rotation = initialLeverRotation;
     }
 
     void ResetInteractable()

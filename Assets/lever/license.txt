@@ -1,0 +1,11 @@
+Model Information:
+* title:	Lever
+* source:	https://sketchfab.com/3d-models/lever-711403ceebb94b77a6eca5c0e631d3b6
+* author:	cmyer29 (https://sketchfab.com/cmyer29)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lever" (https://sketchfab.com/3d-models/lever-711403ceebb94b77a6eca5c0e631d3b6) by cmyer29 (https://sketchfab.com/cmyer29) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
