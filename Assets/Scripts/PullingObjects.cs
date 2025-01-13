@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -57,7 +57,7 @@ public class PullingObjects : MonoBehaviour
     void FixedUpdate()
     {
         // Check for input to start pulling.
-        
+
 
         // Handle pulling if active.
         if (isPulling && objectToPull != null)
@@ -134,7 +134,7 @@ public class PullingObjects : MonoBehaviour
             // Ensure the Y position remains the same to prevent vertical movement.
             targetPosition.y = objectToPull.position.y;
 
-            // Set the object’s position.
+            // Set the objectï¿½s position.
             objectToPull.position = targetPosition;
         }
         // If the object is within the minDistance, stop pulling completely (no movement).
@@ -175,7 +175,7 @@ public class PullingObjects : MonoBehaviour
         // Show line renderer when within pull range
         if (lineRenderer != null && objectToPull != null)
         {
-            
+
             lineRenderer.SetPosition(0, playerPullPosition.position);  // Set the start position (player)
             lineRenderer.SetPosition(1, objectToPull.position);        // Set the end position (object)
         }
