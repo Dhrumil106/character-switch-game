@@ -6,67 +6,64 @@ public class pressurePlate : MonoBehaviour
 {
 
     [Header("Pressure Plate Settings")]
-    public Transform cube; // The cube to move
-    public Transform startPosition; // The start position for the cube
-    public Transform endPosition; // The end position for the cube
-    public float moveSpeed = 2f; // Speed at which the cube moves
+    public Transform elevator; // The elevator object to move (cube)
+    public Transform startPosition; // The start position for the elevator
+    public Transform endPosition; // The end position for the elevator
+    public float moveSpeed = 2f; // Speed at which the elevator moves
     private bool isPressed = false; // Tracks if the plate is stepped on
-    private Collider plateCollider;
     public float plateUpHeight = 0.5f; // Height to move the plate up when pressed
     private Vector3 originalPlatePosition; // Original position of the plate
     private HashSet<string> objectsOnPlate = new HashSet<string>(); // To track objects on the plate
+    public Elevator script;
 
     void Start()
     {
-        plateCollider = GetComponent<Collider>(); // Get the collider of the plate to detect collisions
         originalPlatePosition = transform.position; // Store the original position of the plate
     }
 
     void Update()
     {
-        // Move the cube based on whether the plate is stepped on or not
-        if (isPressed)
+        // If player isn't colliding with the bottom of the elevator, move it based on pressure plate state
+        if (isPressed && !script.isPlayerCollidingWithBottom)
         {
-            MoveCube(endPosition.position); // Move the cube to the end position
-            MovePlateUp(); // Move the plate up
+            MoveElevator(endPosition.position); // Move the elevator to the end position
+            MovePlateUp(); // Move the plate up when pressed
         }
-        else
+        else if (!isPressed)
         {
-            MoveCube(startPosition.position); // Move the cube back to the start position
-            MovePlateDown(); // Move the plate back down to its original position
+            MoveElevator(startPosition.position); // Move the elevator back to the start position
+            MovePlateDown(); // Move the plate down when not pressed or collision detected
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // Detect if the player or any object steps on the plate
-        if (other.CompareTag("Player") || other.CompareTag("Pullable")) // Detect both the player and pullable objects
+        if (other.CompareTag("Player") || other.CompareTag("Pullable")) // Detect player or pullable objects
         {
-            objectsOnPlate.Add(other.tag); // Add the object to the set
-            CheckPressurePlateState(); // Check if the plate should be pressed
+            objectsOnPlate.Add(other.tag);
+            CheckPressurePlateState();
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        // Detect if the player or any object leaves the plate
-        if (other.CompareTag("Player") || other.CompareTag("Pullable")) // Detect both the player and pullable objects
+        if (other.CompareTag("Player") || other.CompareTag("Pullable"))
         {
-            objectsOnPlate.Remove(other.tag); // Remove the object from the set
-            CheckPressurePlateState(); // Check if the plate should be unpressed
+            objectsOnPlate.Remove(other.tag);
+            CheckPressurePlateState();
         }
     }
 
     void CheckPressurePlateState()
     {
-        // If any object is on the plate, keep it pressed
+        // If any object is on the plate, it is considered pressed
         isPressed = objectsOnPlate.Count > 0;
     }
 
-    void MoveCube(Vector3 target)
+    void MoveElevator(Vector3 target)
     {
-        // Move the cube smoothly towards the target position
-        cube.position = Vector3.MoveTowards(cube.position, target, moveSpeed * Time.deltaTime);
+        // Move the elevator smoothly towards the target position
+        elevator.position = Vector3.MoveTowards(elevator.position, target, moveSpeed * Time.deltaTime);
     }
 
     void MovePlateUp()
@@ -81,4 +78,6 @@ public class pressurePlate : MonoBehaviour
         // Move the plate back down to its original position
         transform.position = Vector3.MoveTowards(transform.position, originalPlatePosition, moveSpeed * Time.deltaTime);
     }
+
+    // Detect collision with player's head or bottom
 }
