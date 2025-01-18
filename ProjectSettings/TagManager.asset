@@ -9,6 +9,7 @@ TagManager:
   - Reflector
   - Door
   - doorOpen
+  - Elevator
   layers:
   - Default
   - TransparentFX

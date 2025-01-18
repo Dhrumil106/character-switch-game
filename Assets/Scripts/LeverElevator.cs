@@ -1,9 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class SinglePressurePlate : MonoBehaviour
+public class LeverElevator : MonoBehaviour
 {
-
     [Header("Elevator Settings")]
     public Transform elevator; // The elevator object to move
     public Transform startPosition; // The start position for the elevator
@@ -11,9 +11,9 @@ public class SinglePressurePlate : MonoBehaviour
     public float moveSpeed = 2f; // Speed of the elevator movement
 
     [Header("Pressure Plate Settings")]
-    public pressurePlate pressurePlate; // Reference to the pressure plate
+     // Reference to the pressure plate
     public Elevator elevatorScript;
-    
+    public Lever2 leverScript;
     void Update()
     {
         if (!elevatorScript.isPlayerCollidingWithBottom)
@@ -21,7 +21,7 @@ public class SinglePressurePlate : MonoBehaviour
         {
 
 
-            if (pressurePlate.IsPressed)
+            if (leverScript.isLeverActivated)
             {
                 MoveElevator(endPosition.position); // Move the elevator to the end position
             }

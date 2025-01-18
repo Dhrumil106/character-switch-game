@@ -23,7 +23,7 @@ public class rotate : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Player object with tag '" + playerTag + "' not found.");
+            
         }
     }
 

@@ -37,7 +37,8 @@ public class Lever : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && isInteractable)
+        var thirdPerson = other.GetComponent<ThirdPerson>();
+        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && isInteractable && thirdPerson.enabled == true)
         {
             ToggleLever();
         }
@@ -49,8 +50,8 @@ public class Lever : MonoBehaviour
 
         isInteractable = false; // Disable interactions during the toggle process
 
-        // Log current state for debugging
-        Debug.Log($"Toggle Lever: isDoorOpen = {isDoorOpen}");
+       
+
 
         if (isDoorOpen)
         {

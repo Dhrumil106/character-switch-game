@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class pressurePlate : MonoBehaviour
 {
-    [Header("Plate Settings")]
+    
     public float plateDownHeight = 0.2f; // How far the plate moves when pressed
     public float moveSpeed = 2f; // Speed at which the plate moves
     private Vector3 originalPosition; // The original position of the plate
