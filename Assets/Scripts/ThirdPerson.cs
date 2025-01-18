@@ -7,6 +7,7 @@ public class ThirdPerson : MonoBehaviour
     [Header("Refrences")]
     private CharacterController controller;
     public Animator anim;
+    public Elevator elevatorScript;
     [SerializeField] private Transform camera;
 
     [Header("Movement Settings")]
@@ -39,9 +40,12 @@ public class ThirdPerson : MonoBehaviour
     }
     private void Update()
     {
+        if (!elevatorScript.isHeadCollidingWithElevator)
+        {
+            InputManagment();
+            Movement();
+        }
         
-        InputManagment();
-        Movement();
     }
 
     private void Movement()

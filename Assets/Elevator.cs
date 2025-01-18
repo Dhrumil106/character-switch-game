@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
-    public bool isPlayerCollidingWithBottom = false; // Tracks if the player is colliding with the elevator
+    public bool isHeadCollidingWithElevator = false; // Track if the head is colliding with the bottom of the elevator
 
     void OnTriggerEnter(Collider other)
     {
-        // Check if the player is colliding with the elevator's trigger zone
+        // Check if the trigger is from the elevator's bottom part (the part the player collides with)
         if (other.CompareTag("Elevator"))
         {
-            isPlayerCollidingWithBottom = true; // Set true when player enters the elevator trigger
-            Debug.Log("Player collided with the elevator's trigger.");
+            isHeadCollidingWithElevator = true; // Set true when player's head collides with elevator
+            Debug.Log("Player's head is colliding with the elevator's bottom.");
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        // Check if the player has exited the elevator's trigger zone
+        // Check if the player is no longer colliding with the elevator's bottom part
         if (other.CompareTag("Elevator"))
         {
-            isPlayerCollidingWithBottom = false; // Reset when player leaves the elevator trigger
-            Debug.Log("Player left the elevator's trigger.");
+            isHeadCollidingWithElevator = false; // Reset when the player's head is no longer colliding
+            Debug.Log("Player's head is no longer colliding with the elevator's bottom.");
         }
     }
 }

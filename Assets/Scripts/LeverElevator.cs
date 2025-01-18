@@ -16,7 +16,7 @@ public class LeverElevator : MonoBehaviour
     public Lever2 leverScript;
     void Update()
     {
-        if (!elevatorScript.isPlayerCollidingWithBottom)
+        if (!elevatorScript.isHeadCollidingWithElevator)
         // Check if the pressure plate is pressed
         {
 

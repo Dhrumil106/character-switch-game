@@ -10,26 +10,27 @@ public class SinglePressurePlate : MonoBehaviour
     public Transform endPosition; // The end position for the elevator
     public float moveSpeed = 2f; // Speed of the elevator movement
 
+    [Header("Player Settings")]
+    public Elevator player1; // Reference to the player's elevator collision script
+    public Elevator player2;
     [Header("Pressure Plate Settings")]
     public pressurePlate pressurePlate; // Reference to the pressure plate
-    public Elevator elevatorScript;
-    
+
     void Update()
     {
-        if (!elevatorScript.isPlayerCollidingWithBottom)
-        // Check if the pressure plate is pressed
+        // Only move the elevator if the player's head is not colliding with the elevator
+        
+        
+            // Check if the pressure plate is pressed
+        if (pressurePlate.IsPressed && (!player1.isHeadCollidingWithElevator && !player2.isHeadCollidingWithElevator))
         {
-
-
-            if (pressurePlate.IsPressed)
-            {
-                MoveElevator(endPosition.position); // Move the elevator to the end position
-            }
-            else
-            {
-                MoveElevator(startPosition.position); // Move the elevator back to the start position
-            }
+            MoveElevator(endPosition.position); // Move elevator to end position if pressure plate is pressed
         }
+        if(!pressurePlate.IsPressed )
+        {
+            MoveElevator(startPosition.position); // Move elevator back to start position when pressure plate is not pressed
+        }
+        
     }
 
     private void MoveElevator(Vector3 targetPosition)

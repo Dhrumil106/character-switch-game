@@ -25,7 +25,7 @@ public class Lever2 : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         var thirdPerson = other.GetComponent<ThirdPerson>();
-        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && thirdPerson.enabled == true)
+        if (other.CompareTag("Player") && thirdPerson.enabled == true)
         {
             playerInRange = true;
             
