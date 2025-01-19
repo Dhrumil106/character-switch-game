@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using cakeslice;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -21,6 +22,11 @@ public class PullingObjects : MonoBehaviour
     [Header("References")]
     public Transform playerPullPosition; // Position where the object should move towards.
     public ParticleSystem pullParticles; // Reference to the Particle System
+    public Outline outline;
+
+    [Header("Audio Settings")]
+    public AudioSource audioSource; // Reference to the AudioSource
+    public AudioClip pullSound; // The sound to play while pulling
 
     void Start()
     {
@@ -28,6 +34,14 @@ public class PullingObjects : MonoBehaviour
         if (pullParticles != null)
         {
             pullParticles.Stop();
+        }
+        outline.enabled = false;
+
+        // Ensure the AudioSource is properly configured
+        if (audioSource != null)
+        {
+            audioSource.loop = true; // Set the audio to loop
+            audioSource.clip = pullSound; // Assign the pulling sound clip
         }
     }
 
@@ -48,10 +62,13 @@ public class PullingObjects : MonoBehaviour
         if (isPulling && objectToPull != null)
         {
             PullObject();
-            UpdateParticleSystem();  // Update the particle system while pulling
-            ChangeObjectColor(Color.green);  // Change to green while pulling
+            UpdateParticleSystem();
+            ChangeObjectColor(Color.black);  // Change to black while pulling
             CheckMaxDistance();
         }
+
+        // Handle highlighting and outlines for pullable objects
+        HandleObjectOutlines();
     }
 
     void FixedUpdate()
@@ -59,8 +76,8 @@ public class PullingObjects : MonoBehaviour
         if (isPulling && objectToPull != null)
         {
             PullObject();
-            UpdateParticleSystem();  // Update the particle system while pulling
-            ChangeObjectColor(Color.green);  // Change to green while pulling
+            UpdateParticleSystem();
+            ChangeObjectColor(Color.black);
             CheckMaxDistance();
         }
     }
@@ -74,8 +91,8 @@ public class PullingObjects : MonoBehaviour
             if (collider.CompareTag(pullableTag))
             {
                 objectToPull = collider.transform;
-                objectRenderer = objectToPull.GetComponent<Renderer>(); // Get the Renderer of the object
-                originalColor = objectRenderer.material.color;  // Store the original color
+                objectRenderer = objectToPull.GetComponent<Renderer>();
+                originalColor = objectRenderer.material.color; // Store the original color
                 isPulling = true;
 
                 if (pullParticles != null)
@@ -83,8 +100,11 @@ public class PullingObjects : MonoBehaviour
                     pullParticles.Play(); // Start the particle effect
                 }
 
-                // Change the color to red when in pulling range, before starting the pull
-                
+                // Play pulling sound
+                if (audioSource != null && pullSound != null)
+                {
+                    audioSource.Play();
+                }
 
                 Debug.Log("Started pulling: " + objectToPull.name);
                 return;
@@ -99,11 +119,17 @@ public class PullingObjects : MonoBehaviour
         isPulling = false;
         objectToPull = null;
         Debug.Log("Stopped pulling.");
-        ResetObjectColor(); // Reset color when pulling stops
+        ResetObjectColor();
 
         if (pullParticles != null)
         {
             pullParticles.Stop(); // Stop the particle effect
+        }
+
+        // Stop pulling sound
+        if (audioSource != null)
+        {
+            audioSource.Stop();
         }
     }
 
@@ -149,21 +175,15 @@ public class PullingObjects : MonoBehaviour
     {
         if (pullParticles != null && objectToPull != null)
         {
-            // Calculate the midpoint between the player and the object
             Vector3 midPoint = (playerPullPosition.position + objectToPull.position) / 2;
-
-            // Adjust the Y-axis (e.g., raise the particles by 0.5 units)
             midPoint.x += x;
             midPoint.y += y;
             midPoint.z += z;
-            // Update the particle system's position
             pullParticles.transform.position = midPoint;
 
-            // Adjust the particle system's rotation to face the object
             var shape = pullParticles.shape;
             shape.rotation = Quaternion.LookRotation(objectToPull.position - playerPullPosition.position).eulerAngles;
 
-            // Update the scale of the particle system to match the distance
             float distance = Vector3.Distance(playerPullPosition.position, objectToPull.position);
             shape.scale = new Vector3(0.1f, 0.1f, distance);
         }
@@ -176,6 +196,45 @@ public class PullingObjects : MonoBehaviour
         {
             Debug.Log("Object exceeded maximum distance, stopping pull.");
             StopPulling();
+        }
+    }
+
+    private void HandleObjectOutlines()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, pullRange);
+        bool isAnyPullableInRange = false;
+        var playerMove = GetComponent<ThirdPerson>();
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag(pullableTag) && playerMove.enabled == true)
+            {
+                isAnyPullableInRange = true;
+
+                Outline objectOutline = collider.GetComponent<Outline>();
+                if (objectOutline != null)
+                {
+                    objectOutline.enabled = true;
+                }
+            }
+            else
+            {
+                outline.enabled = false;
+            }
+        }
+
+        if (!isAnyPullableInRange)
+        {
+            foreach (Collider collider in Physics.OverlapSphere(transform.position, pullRange * 2))
+            {
+                if (collider.CompareTag(pullableTag))
+                {
+                    Outline objectOutline = collider.GetComponent<Outline>();
+                    if (objectOutline != null)
+                    {
+                        objectOutline.enabled = false;
+                    }
+                }
+            }
         }
     }
 

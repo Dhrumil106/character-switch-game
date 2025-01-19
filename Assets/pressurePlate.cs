@@ -9,7 +9,7 @@ public class pressurePlate : MonoBehaviour
     public float moveSpeed = 2f; // Speed at which the plate moves
     private Vector3 originalPosition; // The original position of the plate
     private HashSet<GameObject> objectsOnPlate = new HashSet<GameObject>(); // Tracks objects on the plate
-
+    public AudioSource AudioSource;
     public bool IsPressed { get; private set; } // Public property to check if the plate is pressed
 
     void Start()
@@ -33,6 +33,7 @@ public class pressurePlate : MonoBehaviour
         {
             objectsOnPlate.Add(other.gameObject);
             UpdatePlateState();
+            AudioSource.Play();
         }
     }
 

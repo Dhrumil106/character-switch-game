@@ -5,31 +5,40 @@ using UnityEngine;
 public class door : MonoBehaviour
 {
 
-    public GameObject door1; // The door to move
-    public Transform targetTransform; // The target position (can be a specific Transform or position)
-    public float moveSpeed = 2f; // Speed of the door's movement
+    public GameObject door1; // The first door to move
+    public Transform targetTransform1; // The target position for door1
+    public GameObject door2; // The second door to move
+    public Transform targetTransform2; // The target position for door2
+    public float moveSpeed = 2f; // Speed of the doors' movement
 
-    private Vector3 originalPosition; // Store the original position of the door
+    private Vector3 originalPosition1; // Store the original position of door1
+    private Vector3 originalPosition2; // Store the original position of door2
     private bool isLaserHitting = false; // Tracks whether the laser is hitting
 
     private void Start()
     {
-        // Store the original position of the door
-        originalPosition = door1.transform.position;
+        // Store the original positions of the doors
+        originalPosition1 = door1.transform.position;
+        originalPosition2 = door2.transform.position;
     }
 
     private void Update()
     {
-        // Check if the laser is hitting the door
         if (isLaserHitting)
         {
-            // Move to the target position if the laser is hitting
-            door1.transform.position = Vector3.MoveTowards(door1.transform.position, targetTransform.position, moveSpeed * Time.deltaTime);
+            // Move door1 to its target position
+            door1.transform.position = Vector3.MoveTowards(door1.transform.position, targetTransform1.position, moveSpeed * Time.deltaTime);
+
+            // Move door2 to its target position
+            door2.transform.position = Vector3.MoveTowards(door2.transform.position, targetTransform2.position, moveSpeed * Time.deltaTime);
         }
         else
         {
-            // Return to the original position when the laser is not hitting
-            door1.transform.position = Vector3.MoveTowards(door1.transform.position, originalPosition, moveSpeed * Time.deltaTime);
+            // Return door1 to its original position
+            door1.transform.position = Vector3.MoveTowards(door1.transform.position, originalPosition1, moveSpeed * Time.deltaTime);
+
+            // Return door2 to its original position
+            door2.transform.position = Vector3.MoveTowards(door2.transform.position, originalPosition2, moveSpeed * Time.deltaTime);
         }
     }
 

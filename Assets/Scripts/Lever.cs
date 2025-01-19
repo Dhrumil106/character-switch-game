@@ -1,5 +1,7 @@
+using cakeslice;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Lever : MonoBehaviour
@@ -18,8 +20,11 @@ public class Lever : MonoBehaviour
     private Rigidbody door1Rigidbody; // Rigidbody for door1
     private Rigidbody door2Rigidbody; // Rigidbody for door2
     private Animator leverAnimator; // Reference to the lever's Animator
-
+    public Outline outline;
     public float doorDelay = 1.0f; // Delay before doors start opening/closing
+
+    public AudioSource leverSound; // AudioSource for the lever sound
+    public AudioSource doorSound; // Shared AudioSource for the door sound effect
 
     private void Start()
     {
@@ -33,6 +38,7 @@ public class Lever : MonoBehaviour
 
         // Get the Animator component on the lever
         leverAnimator = GetComponent<Animator>();
+        outline.enabled = false;
     }
 
     private void OnTriggerStay(Collider other)
@@ -42,6 +48,23 @@ public class Lever : MonoBehaviour
         {
             ToggleLever();
         }
+        if (other.CompareTag("Player") && isInteractable && thirdPerson.enabled == true)
+        {
+            outline.enabled = true;
+        }
+        if ((thirdPerson == null || thirdPerson.enabled == false) && other.CompareTag("Player"))
+        {
+            outline.enabled = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        var thirdPerson = other.GetComponent<ThirdPerson>();
+        if (other.CompareTag("Player") && thirdPerson.enabled == true)
+        {
+            outline.enabled = false;
+        }
     }
 
     void ToggleLever()
@@ -50,8 +73,11 @@ public class Lever : MonoBehaviour
 
         isInteractable = false; // Disable interactions during the toggle process
 
-       
-
+        // Play lever interaction sound
+        if (leverSound != null)
+        {
+            leverSound.Play();
+        }
 
         if (isDoorOpen)
         {
@@ -71,6 +97,13 @@ public class Lever : MonoBehaviour
     public void OpenDoors()
     {
         StopAllCoroutines(); // Stop any ongoing movement
+
+        // Play shared door sound
+        if (doorSound != null)
+        {
+            doorSound.Play();
+        }
+
         StartCoroutine(MoveDoor(door1Rigidbody, door1ClosedLocalPosition, door1OpenLocalPosition));
         StartCoroutine(MoveDoor(door2Rigidbody, door2ClosedLocalPosition, door2OpenLocalPosition));
     }
@@ -78,6 +111,13 @@ public class Lever : MonoBehaviour
     public void CloseDoors()
     {
         StopAllCoroutines(); // Stop any ongoing movement
+
+        // Play shared door sound
+        if (doorSound != null)
+        {
+            doorSound.Play();
+        }
+
         StartCoroutine(MoveDoor(door1Rigidbody, door1OpenLocalPosition, door1ClosedLocalPosition));
         StartCoroutine(MoveDoor(door2Rigidbody, door2OpenLocalPosition, door2ClosedLocalPosition));
     }
